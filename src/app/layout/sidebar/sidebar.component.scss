@@ -1,0 +1,25 @@
+a[mat-list-item] {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  span{
+    color: #ccc;
+    font-size: 14px;
+  }
+}
+
+a[mat-list-item].active {
+  background-color: #000;
+  transition: all 0.3s ease;
+}
+
+mat-icon[inline="true"] {
+  vertical-align: middle;
+  margin-right: 8px;
+  font-size: 18px;
+  color: #ccc;
+}
+
+span {
+  line-height: 24px;
+}

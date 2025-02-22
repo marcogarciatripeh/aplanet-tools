@@ -1,0 +1,23 @@
+.logo{
+  height: 25px;
+}
+.mat-toolbar{
+  background-color: #111619;
+  span{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 10px;
+    .pill{
+      font-size: 10px;
+      display: inline-flex;
+      padding: 0px 10px;
+      border-radius: 20px;
+      background-color: #333;
+      color: #ccc;
+      text-transform: uppercase;
+      height: 20px;
+      margin-top: 10px;
+    }
+  }
+}
