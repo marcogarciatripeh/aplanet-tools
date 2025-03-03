@@ -1,0 +1,15 @@
+<div class="editor-container">
+  <div class="monaco-wrapper">
+      <ngx-monaco-editor
+          [options]="editorOptions"
+          [(ngModel)]="code"
+          (ngModelChange)="onCodeChanged($event)">
+      </ngx-monaco-editor>
+  </div>
+
+  <div class="error-message" *ngIf="currentError">
+      <div class="error-content">
+          {{ currentError }}
+      </div>
+  </div>
+</div>
