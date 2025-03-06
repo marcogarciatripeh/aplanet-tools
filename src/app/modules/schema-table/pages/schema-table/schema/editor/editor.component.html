@@ -1,15 +1,31 @@
 <div class="editor-container">
+  <label for="">
+    Schema editor
+    <span>Insert your schema in JSON format to generate the table</span>
+  </label>
   <div class="monaco-wrapper">
-      <ngx-monaco-editor
-          [options]="editorOptions"
-          [(ngModel)]="code"
-          (ngModelChange)="onCodeChanged($event)">
-      </ngx-monaco-editor>
+    <div class="loading-container" [class.hidden]="editorLoaded">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <ngx-monaco-editor
+        [options]="editorOptions"
+        [(ngModel)]="code"
+        (onInit)="onEditorInit()"
+        (ngModelChange)="onCodeChanged($event)">
+    </ngx-monaco-editor>
   </div>
 
   <div class="error-message" *ngIf="currentError">
       <div class="error-content">
           {{ currentError }}
       </div>
+  </div>
+
+  <div>
+    <button mat-flat-button class="w-100" [disabled]="hasError">
+      Table Generator
+      <mat-icon>table_view</mat-icon>
+    </button>
   </div>
 </div>

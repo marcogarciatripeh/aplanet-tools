@@ -55,46 +55,6 @@ export const defaultSchema = {
   }
 };
 
-export const exampleSchemas = [
-  {
-    columns: [
-      {
-        name: "ID",
-        type: "number",
-        unit: "integer"
-      },
-      {
-        name: "Name",
-        type: "text"
-      }
-    ],
-    rows: []
-  },
-
-  {
-    columns: [
-      {
-        name: "Options",
-        type: "choices",
-        options: ["Yes", "No", "Maybe"]
-      }
-    ],
-    rows: []
-  },
-
-  {
-    columns: [
-      {
-        name: "Value",
-        type: "number",
-        unit: "currency",
-        number_of_decimals: 2
-      }
-    ],
-    rows: []
-  }
-];
-
 export const defaultTemplate = `{
   "columns": [
     {
@@ -102,6 +62,11 @@ export const defaultTemplate = `{
       "type": "text",
       "unit": null,
       "kpi_variable": "regions"
+    },
+    {
+      "name": "Country",
+      "type": "text",
+      "unit": null
     },
     {
       "name": "Economic value",

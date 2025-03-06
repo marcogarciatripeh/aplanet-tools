@@ -15,7 +15,7 @@
 .monaco-wrapper {
   flex: 1;
   position: relative;
-  min-height: 350px;
+  min-height: 360px;
 }
 
 ngx-monaco-editor {
@@ -40,7 +40,7 @@ ngx-monaco-editor {
 
 .error-message {
   position: absolute;
-  bottom: 12px;
+  top: 80%;
   left: 8px;
   right: 8px;
   z-index: 1000;
@@ -56,4 +56,23 @@ ngx-monaco-editor {
   font-weight: 500;
   padding: 8px 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.loading-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #1e1e1e;
+  z-index: 1;
+  height: calc(100% - 8px);
+
+  &.hidden {
+    display: none !important;
+  }
 }

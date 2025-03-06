@@ -1,10 +1,13 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
 import { defaultTemplate, monacoConfig, monacoEnvironment } from './editor.configuration';
 import { defaultSchema } from './editor.configuration';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-editor',
@@ -13,7 +16,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     CommonModule,
     MonacoEditorModule,
     FormsModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatIconModule,
+    MatButtonModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     { provide: NGX_MONACO_EDITOR_CONFIG, useValue: monacoConfig }
@@ -30,6 +36,10 @@ export class EditorComponent implements OnInit {
 
   editorOptions = monacoConfig.defaultOptions;
   currentError: string = '';
+  hasError: boolean = false;
+  editorLoaded = false;
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     (self as any).MonacoEnvironment = monacoEnvironment;
@@ -56,13 +66,20 @@ export class EditorComponent implements OnInit {
       }
 
       this.currentError = '';
+      this.hasError = false;
       this.errorMessage.emit('');
       this.validationChange.emit(false);
     } catch (e: any) {
       this.currentError = e.message;
+      this.hasError = true;
       this.errorMessage.emit(e.message);
       this.validationChange.emit(true);
       console.log(e);
     }
+  }
+
+  onEditorInit() {
+    this.editorLoaded = true;
+    this.cdr.detectChanges();
   }
 }
