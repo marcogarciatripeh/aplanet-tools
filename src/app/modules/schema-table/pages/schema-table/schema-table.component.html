@@ -1,6 +1,27 @@
-<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight="true">
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" dynamicHeight>
   <mat-tab label="Schema to Table">
-    <app-editor></app-editor>
+    <app-editor
+      (validCode)="onValidCode($event)"
+      (validationChange)="onValidationChange($event)">
+    </app-editor>
+
+    <div class="actions-container">
+      <button mat-flat-button
+        color="primary"
+        class="w-100"
+        [disabled]="hasError"
+        (click)="generateTable()">
+        Table Generator
+        <mat-icon>table_view</mat-icon>
+      </button>
+    </div>
+
+    <div class="table-container">
+      <app-table
+        *ngIf="tableData"
+        [data]="tableData">
+      </app-table>
+    </div>
   </mat-tab>
   <mat-tab label="Table to Schema">Content 2</mat-tab>
 </mat-tab-group>

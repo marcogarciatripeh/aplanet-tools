@@ -14,18 +14,11 @@
         (onInit)="onEditorInit()"
         (ngModelChange)="onCodeChanged($event)">
     </ngx-monaco-editor>
-  </div>
 
-  <div class="error-message" *ngIf="currentError">
+    <div class="error-message" *ngIf="currentError">
       <div class="error-content">
           {{ currentError }}
       </div>
-  </div>
-
-  <div>
-    <button mat-flat-button class="w-100" [disabled]="hasError">
-      Table Generator
-      <mat-icon>table_view</mat-icon>
-    </button>
+    </div>
   </div>
 </div>

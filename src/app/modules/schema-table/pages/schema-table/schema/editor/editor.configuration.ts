@@ -36,7 +36,7 @@ export const defaultSchema = {
     required: ["columns"],
     columnRequired: ["name", "type"],
     minColumns: 1,
-    validateColumn: (column: any) => {
+    validateColumn: (column: any, allColumns: any[]) => {
       if (!column.name || !column.type) {
         return false;
       }
@@ -50,6 +50,12 @@ export const defaultSchema = {
           return false;
         }
       }
+
+      const duplicateNames = allColumns.filter(c => c.name === column.name);
+      if (duplicateNames.length > 1) {
+        throw new Error(`Duplicate column name found: ${column.name}`);
+      }
+
       return true;
     }
   }

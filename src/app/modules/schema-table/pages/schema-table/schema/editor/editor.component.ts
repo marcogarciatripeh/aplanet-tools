@@ -33,6 +33,7 @@ export class EditorComponent implements OnInit {
   @Output() codeChange = new EventEmitter<string>();
   @Output() validationChange = new EventEmitter<boolean>();
   @Output() errorMessage = new EventEmitter<string>();
+  @Output() validCode = new EventEmitter<any>();
 
   editorOptions = monacoConfig.defaultOptions;
   currentError: string = '';
@@ -60,7 +61,7 @@ export class EditorComponent implements OnInit {
       }
 
       for (const column of parsedJson.columns) {
-        if (!defaultSchema.validationRules.validateColumn(column)) {
+        if (!defaultSchema.validationRules.validateColumn(column, parsedJson.columns)) {
           throw new Error(`Column invalid: ${JSON.stringify(column)}`);
         }
       }
@@ -69,17 +70,18 @@ export class EditorComponent implements OnInit {
       this.hasError = false;
       this.errorMessage.emit('');
       this.validationChange.emit(false);
+      this.validCode.emit(parsedJson);
     } catch (e: any) {
       this.currentError = e.message;
       this.hasError = true;
       this.errorMessage.emit(e.message);
       this.validationChange.emit(true);
-      console.log(e);
     }
   }
 
   onEditorInit() {
     this.editorLoaded = true;
+    this.validateJson();
     this.cdr.detectChanges();
   }
 }
