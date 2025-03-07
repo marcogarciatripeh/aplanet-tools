@@ -10,7 +10,7 @@ import { TableColumn, TableRow, UnitSelection } from '../../../interfaces/schama
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
-  selector: 'app-table-view',
+  selector: 'app-table-render',
   standalone: true,
   imports: [
     CommonModule,
@@ -20,12 +20,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     FormsModule,
     MatSlideToggleModule
   ],
-  templateUrl: './table-view.component.html',
-  styleUrls: ['./table-view.component.scss'],
+  templateUrl: './table-render.component.html',
+  styleUrls: ['./table-render.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 
-export class TableViewComponent {
+export class TableRenderComponent {
   @Input() set data(value: any) {
     if (value) {
       this.columns = value.columns || [];

@@ -5,7 +5,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { EditorComponent } from './editor/editor.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { TableViewComponent } from './table-view/table-view.component';
+import { TableBuilderComponent } from "./table-builder/table-builder.component";
+import { TableRenderComponent } from './table-render/table-render.component';
 
 @Component({
   selector: 'app-schema-table',
@@ -17,8 +18,9 @@ import { TableViewComponent } from './table-view/table-view.component';
     EditorComponent,
     MatButtonModule,
     MatIconModule,
-    TableViewComponent
-  ],
+    TableRenderComponent,
+    TableBuilderComponent
+],
   providers: [],
   templateUrl: './schema-table.component.html',
   styleUrl: './schema-table.component.scss',
