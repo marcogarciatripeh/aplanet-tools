@@ -2,10 +2,10 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
-import { EditorComponent } from './schema/editor/editor.component';
-import { TableComponent } from './schema/table/table.component';
+import { EditorComponent } from './editor/editor.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { TableViewComponent } from './table-view/table-view.component';
 
 @Component({
   selector: 'app-schema-table',
@@ -15,9 +15,9 @@ import { MatIconModule } from '@angular/material/icon';
     RouterModule,
     MatTabsModule,
     EditorComponent,
-    TableComponent,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    TableViewComponent
   ],
   providers: [],
   templateUrl: './schema-table.component.html',

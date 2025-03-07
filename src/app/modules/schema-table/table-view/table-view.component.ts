@@ -4,12 +4,13 @@ import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
-import { Variables } from '../../../../../../services/variables.service';
+import { Variables } from '../../../services/variables.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { TableColumn, TableRow, UnitSelection } from '../../../../../../interfaces/schama-table.interface';
+import { TableColumn, TableRow, UnitSelection } from '../../../interfaces/schama-table.interface';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 @Component({
-  selector: 'app-table',
+  selector: 'app-table-view',
   standalone: true,
   imports: [
     CommonModule,
@@ -19,11 +20,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     FormsModule,
     MatSlideToggleModule
   ],
-  templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss'],
+  templateUrl: './table-view.component.html',
+  styleUrls: ['./table-view.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TableComponent {
+
+export class TableViewComponent {
   @Input() set data(value: any) {
     if (value) {
       this.columns = value.columns || [];

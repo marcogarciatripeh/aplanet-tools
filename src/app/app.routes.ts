@@ -8,12 +8,12 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    loadComponent: () => import('./modules/home/pages/home/home.component')
+    loadComponent: () => import('./modules/home/home.component')
       .then(m => m.HomeComponent)
   },
   {
     path: 'schema-table',
-    loadComponent: () => import('./modules/schema-table/pages/schema-table/schema-table.component')
+    loadComponent: () => import('./modules/schema-table/schema-table.component')
       .then(m => m.SchemaTableComponent)
   },
   {
