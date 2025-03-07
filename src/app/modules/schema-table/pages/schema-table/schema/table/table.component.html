@@ -1,11 +1,77 @@
 <div class="table-container">
+  <label for="">
+    Generated table
+    <span>View the table generated from your JSON schema.</span>
+  </label>
   <table mat-table [dataSource]="rows" class="mat-elevation-z1">
-    <ng-container *ngFor="let column of columns" [matColumnDef]="column.name">
-      <th mat-header-cell *matHeaderCellDef>{{ column.name }}</th>
-      <td mat-cell *matCellDef="let row">{{ row[column.name] || '-' }}</td>
-    </ng-container>
+    <ng-container *ngFor="let column of columns; let colIndex = index" [matColumnDef]="column.name">
+      <th mat-header-cell *matHeaderCellDef>{{ column.name | titlecase }}</th>
+      <td mat-cell *matCellDef="let row; let rowIndex = index">
+        <!-- Text input -->
+        <ng-container *ngIf="column.type === 'text' && !column.kpi_variable">
+          <ng-container *ngIf="isPresetRow(row)">
+            {{ row[column.name] }}
+          </ng-container>
+          <mat-form-field *ngIf="!isPresetRow(row)" appearance="outline" density="compact" subscriptSizing="dynamic">
+            <input matInput [(ngModel)]="row[column.name]">
+          </mat-form-field>
+        </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <!-- Boolean toggle -->
+        <ng-container *ngIf="column.type === 'boolean'">
+          <mat-slide-toggle
+            [(ngModel)]="row[column.name]"
+            color="primary">
+          </mat-slide-toggle>
+        </ng-container>
+
+        <!-- Choices Select -->
+        <ng-container *ngIf="column.type === 'choices'">
+          <mat-form-field appearance="outline" density="compact" subscriptSizing="dynamic">
+            <mat-select [(ngModel)]="row[column.name]" [multiple]="true"
+                        [placeholder]="'Select options'">
+              <mat-option *ngFor="let value of getKpiValues(column.kpi_variable || '')" [value]="value">
+                {{ value }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+
+        <!-- KPI Variable text -->
+        <ng-container *ngIf="column.type === 'text' && column.kpi_variable">
+          {{ row[column.name] }}
+        </ng-container>
+
+        <!-- Number input -->
+        <ng-container *ngIf="column.type === 'number'">
+          <div class="number-input-container">
+            <mat-form-field appearance="outline" density="compact" subscriptSizing="dynamic">
+              <input matInput
+                    type="number"
+                    [(ngModel)]="row[column.name]"
+                    [step]="column.number_of_decimals ? '0.' + '0'.repeat(column.number_of_decimals-1) + '1' : '1'"
+                    [value]="row[column.name]">
+              <span matSuffix *ngIf="column.unit === 'percentage'">%</span>
+              <span matSuffix *ngIf="column.unit === 'currency'">€</span>
+            </mat-form-field>
+
+            <!-- Units Select -->
+            <ng-container *ngIf="column.units">
+              <mat-form-field appearance="outline" density="compact" subscriptSizing="dynamic" class="units-select">
+                <mat-select
+                  [(ngModel)]="selectedUnit[getUnitKey(rowIndex, colIndex)]"
+                  (ngModelChange)="onUnitChange($event, rowIndex, colIndex)">
+                  <mat-option *ngFor="let unit of column.units" [value]="unit">
+                    {{ getCurrencySymbol(unit) }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-container>
+          </div>
+        </ng-container>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns; let rowIndex = index"></tr>
   </table>
 </div>

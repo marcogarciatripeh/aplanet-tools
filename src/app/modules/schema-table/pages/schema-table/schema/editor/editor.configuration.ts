@@ -57,6 +57,15 @@ export const defaultSchema = {
       }
 
       return true;
+    },
+    validateRows: (rows: any[]) => {
+      if (rows && rows.length > 0) {
+        const invalidRows = rows.filter(row => !row.name);
+        if (invalidRows.length > 0) {
+          throw new Error('Todas as linhas precisam ter a propriedade "name"');
+        }
+      }
+      return true;
     }
   }
 };

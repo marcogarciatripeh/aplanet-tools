@@ -57,12 +57,19 @@ export class EditorComponent implements OnInit {
       const parsedJson = JSON.parse(this.code);
 
       if (!parsedJson.columns || !Array.isArray(parsedJson.columns) || parsedJson.columns.length < 1) {
-        throw new Error('JSON invalid: must have at least one column');
+        throw new Error('Invalid JSON: must have at least one column');
       }
 
       for (const column of parsedJson.columns) {
         if (!defaultSchema.validationRules.validateColumn(column, parsedJson.columns)) {
-          throw new Error(`Column invalid: ${JSON.stringify(column)}`);
+          throw new Error(`Invalid column: ${JSON.stringify(column)}`);
+        }
+      }
+
+      if (parsedJson.rows && Array.isArray(parsedJson.rows) && parsedJson.rows.length > 0) {
+        const invalidRows = parsedJson.rows.filter((row: any) => !row.name);
+        if (invalidRows.length > 0) {
+          throw new Error('Invalid rows: all rows must have a "name" property');
         }
       }
 
