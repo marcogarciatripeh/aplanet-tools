@@ -5,11 +5,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { Variables } from '../../../services/variables.service';
+import { VariableService } from '../../../services/variables.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
+import { HelperService } from '../../../services/helper.service';
 
 @Component({
   selector: 'app-column-form',
@@ -37,20 +38,27 @@ export class ColumnFormComponent {
     kpi_variable: '',
     number_of_decimals: null
   };
-  types = ['text', 'number', 'boolean', 'choices'];
   variables: string[] = [];
   columns: any[] = [];
   displayedColumns: string[] = ['name', 'type', 'units', 'kpi_variable', 'number_of_decimals', 'actions'];
-  allUnits = ['percentage', 'integer', 'currency', 'euro', 'pound', 'dollar'];
-  baseUnits = ['percentage', 'integer', 'currency'];
-  currencyUnits = ['euro', 'pound', 'dollar'];
+  types: string[];
+  allUnits: string[];
+  baseUnits: string[];
+  currencyUnits: string[];
   filteredVariables: Observable<string[]>;
   variableControl = new FormControl('');
 
   @Output() addColumn = new EventEmitter<any>();
 
-  constructor(private variablesService: Variables) {
-    this.variables = Array.from(this.variablesService.variables.keys());
+  constructor(
+    private variableService: VariableService,
+    private helperService: HelperService
+  ) {
+    this.variables = Array.from(this.variableService.variables.keys());
+    this.types = this.helperService.getTypes();
+    this.allUnits = this.helperService.getAllUnits();
+    this.baseUnits = this.helperService.getBaseUnits();
+    this.currencyUnits = this.helperService.getCurrencyUnits();
 
     this.filteredVariables = this.variableControl.valueChanges.pipe(
       startWith(''),
@@ -72,11 +80,11 @@ export class ColumnFormComponent {
   }
 
   isBaseUnitSelected(): boolean {
-    return this.column.units.some(unit => this.baseUnits.includes(unit));
+    return this.column.units.some(unit => this.helperService.isBaseUnit(unit));
   }
 
   isCurrencySelected(): boolean {
-    return this.column.units.some(unit => this.currencyUnits.includes(unit));
+    return this.column.units.some(unit => this.helperService.isCurrencyUnit(unit));
   }
 
   isVariableRequired(): boolean {

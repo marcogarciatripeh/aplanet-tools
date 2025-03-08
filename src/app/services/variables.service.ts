@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class Variables {
+export class VariableService {
   readonly variables = new Map<string, string[]>([
     ['regions', ['Region 1', 'Region 2']],
     ['country', ['Country 1', 'Country 2']],
@@ -78,17 +78,7 @@ export class Variables {
     ['hazard', ['hazard 1', 'hazard 2']]
   ]);
 
-  private currencySymbols = new Map<string, string>([
-    ['euro', '€'],
-    ['pound', '£'],
-    ['dollar', '$']
-  ]);
-
   getVariableValues(key: string): string[] {
     return this.variables.get(key) || [];
-  }
-
-  getCurrencySymbol(currency: string): string {
-    return this.currencySymbols.get(currency) || currency;
   }
 }

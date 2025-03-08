@@ -4,10 +4,11 @@ import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
-import { Variables } from '../../../services/variables.service';
+import { VariableService } from '../../../services/variables.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { TableColumn, TableRow, UnitSelection } from '../../../interfaces/schama-table.interface';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { HelperService } from '../../../services/helper.service';
 
 @Component({
   selector: 'app-table-render',
@@ -54,7 +55,8 @@ export class TableRenderComponent {
   selectedUnit: UnitSelection = {};
 
   constructor(
-    private variables: Variables,
+    private variableService: VariableService,
+    private helperService: HelperService,
     private breakpointObserver: BreakpointObserver,
     private elementRef: ElementRef
   ) {}
@@ -108,7 +110,7 @@ export class TableRenderComponent {
     const kpiColumn = this.columns.find(col => col.kpi_variable);
 
     if (kpiColumn && kpiColumn.kpi_variable) {
-      const kpiValues = this.variables.getVariableValues(kpiColumn.kpi_variable);
+      const kpiValues = this.variableService.getVariableValues(kpiColumn.kpi_variable);
 
       kpiValues.forEach((value, rowIndex) => {
         const row: TableRow = {};
@@ -172,7 +174,7 @@ export class TableRenderComponent {
   }
 
   getCurrencySymbol(currency: string): string {
-    return this.variables.getCurrencySymbol(currency);
+    return this.helperService.getCurrencySymbol(currency);
   }
 
   getUnitKey(rowIndex: number, columnIndex: number): string {
@@ -180,7 +182,7 @@ export class TableRenderComponent {
   }
 
   getKpiValues(kpiVariable: string): string[] {
-    return this.variables.getVariableValues(kpiVariable);
+    return this.variableService.getVariableValues(kpiVariable);
   }
 
   //On session
