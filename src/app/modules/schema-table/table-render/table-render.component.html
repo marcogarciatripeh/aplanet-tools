@@ -1,7 +1,7 @@
 <div class="table-container">
-  <label for="">
+  <label class="title">
     Generated table
-    <span>View the table generated from your JSON schema.</span>
+    <span>View the table generated from your JSON schema</span>
   </label>
   <table mat-table [dataSource]="rows" class="mat-elevation-z1">
     <ng-container *ngFor="let column of columns; let colIndex = index" [matColumnDef]="column.name">

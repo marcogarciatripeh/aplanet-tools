@@ -72,14 +72,6 @@ export class TableRenderComponent {
   }
 
   //Misc. session
-  isEditable(column: TableColumn): boolean {
-    return column.type === 'text' && !column.kpi_variable;
-  }
-
-  isPresetRow(row: TableRow): boolean {
-    return 'name' in row;
-  }
-
   hasOnlyChoiceColumns(): boolean {
     return this.columns.length > 0 && this.columns.every(col => col.type === 'choices');
   }
@@ -87,6 +79,15 @@ export class TableRenderComponent {
   scrollToTable() {
     const element = this.elementRef.nativeElement;
     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  //Check session
+  isEditable(column: TableColumn): boolean {
+    return column.type === 'text' && !column.kpi_variable;
+  }
+
+  isPresetRow(row: TableRow): boolean {
+    return 'name' in row;
   }
 
   //Initialize session

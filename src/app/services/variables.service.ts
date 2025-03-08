@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class Variables {
-  private variables = new Map<string, string[]>([
+  readonly variables = new Map<string, string[]>([
     ['regions', ['Region 1', 'Region 2']],
     ['country', ['Country 1', 'Country 2']],
     ['location-of-operation', ['location of operation 1', 'location of operation 2']],

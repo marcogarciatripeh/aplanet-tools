@@ -1,0 +1,24 @@
+.row-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 15px 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-bottom: none;
+
+  mat-form-field {
+    flex: 1;
+    min-width: 180px;
+    margin-bottom: 0;
+  }
+
+  button {
+    height: 50px;
+    margin-top: 0;
+    white-space: nowrap;
+    width: 120px;
+  }
+}
