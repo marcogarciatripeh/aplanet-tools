@@ -31,6 +31,7 @@ export class RowFormComponent {
   displayedColumns: string[] = ['name', 'actions'];
 
   @Output() addRow = new EventEmitter<any>();
+  @Output() removeRow = new EventEmitter<number>();
 
   onAddRow() {
     if (this.isValid()) {
@@ -49,6 +50,7 @@ export class RowFormComponent {
   deleteRow(index: number) {
     this.rows.splice(index, 1);
     this.rows = [...this.rows];
+    this.removeRow.emit(index);
   }
 
   resetForm() {

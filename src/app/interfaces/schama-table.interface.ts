@@ -18,3 +18,8 @@ export interface CurrencySymbol {
 export type UnitSelection = {
   [key: string]: string;
 }
+
+export interface TableSchema {
+  columns: any[];
+  rows: any[];
+}

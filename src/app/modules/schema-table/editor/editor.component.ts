@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewEncapsulation, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-editor',
@@ -19,7 +20,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatFormFieldModule,
     MatIconModule,
     MatButtonModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTooltipModule
   ],
   providers: [
     { provide: NGX_MONACO_EDITOR_CONFIG, useValue: monacoConfig }
@@ -30,6 +32,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class EditorComponent implements OnInit {
   @Input() code: string = defaultTemplate;
+  @Input() useDefaultTemplate: boolean = true;
   @Output() codeChange = new EventEmitter<string>();
   @Output() validationChange = new EventEmitter<boolean>();
   @Output() errorMessage = new EventEmitter<string>();
@@ -39,16 +42,33 @@ export class EditorComponent implements OnInit {
   currentError: string = '';
   hasError: boolean = false;
   editorLoaded = false;
+  editor: any;
 
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     (self as any).MonacoEnvironment = monacoEnvironment;
+
+    if (this.useDefaultTemplate) {
+      this.code = defaultTemplate;
+    } else {
+      this.code = JSON.stringify({
+        columns: [],
+        rows: []
+      }, null, 4);
+    }
   }
 
   onCodeChanged(value: string) {
     this.code = value;
     this.codeChange.emit(value);
+    this.validateJson();
+  }
+
+  onEditorInit(editor: any) {
+    this.editor = editor;
+    this.editorLoaded = true;
+    this.cdr.detectChanges();
     this.validateJson();
   }
 
@@ -86,9 +106,21 @@ export class EditorComponent implements OnInit {
     }
   }
 
-  onEditorInit() {
-    this.editorLoaded = true;
-    this.validateJson();
-    this.cdr.detectChanges();
+  updateSchema(schema: string) {
+    if (this.editor) {
+      this.editor.setValue(schema);
+      this.validateJson();
+    }
+  }
+
+  async copyToClipboard() {
+    if (this.editor) {
+      const content = this.editor.getValue();
+      try {
+        await navigator.clipboard.writeText(content);
+      } catch (err) {
+        console.error('Falha ao copiar para área de transferência:', err);
+      }
+    }
   }
 }

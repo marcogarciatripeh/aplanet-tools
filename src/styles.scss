@@ -5,9 +5,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 label.title{
   font-size: 14px;
-  padding: 10px 0;
+  padding: 15px 0;
   font-weight: bold;
   display: block;
+  background-color: #bbb;
+  border-radius: 30px;
+  padding-left: 15px;
+  margin: 20px 0 10px 0;
+  position: relative;
+  color: #333;
   span{
     font-size: 10px;
     color: #999;

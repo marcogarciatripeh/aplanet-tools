@@ -76,3 +76,18 @@ ngx-monaco-editor {
     display: none !important;
   }
 }
+
+.editor-actions {
+  position: absolute;
+  top: 23px;
+  right: 5px;
+  z-index: 2;
+  transform: scale(0.8);
+
+  .copy-button {
+    background: rgba(255, 255, 255, 0.9);
+    &:hover {
+      background: rgba(255, 255, 255, 1);
+    }
+  }
+}

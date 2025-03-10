@@ -49,6 +49,7 @@ export class ColumnFormComponent {
   variableControl = new FormControl('');
 
   @Output() addColumn = new EventEmitter<any>();
+  @Output() removeColumn = new EventEmitter<number>();
 
   constructor(
     private variableService: VariableService,
@@ -158,6 +159,7 @@ export class ColumnFormComponent {
   deleteColumn(index: number) {
     this.columns.splice(index, 1);
     this.columns = [...this.columns];
+    this.removeColumn.emit(index);
   }
 
   _filter(value: string): string[] {

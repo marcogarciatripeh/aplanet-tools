@@ -1,9 +1,21 @@
 <div class="table-builder">
   <label class="title">
     Table creator
-    <span>Fill in the fields below to create columns and rows</span>
   </label>
 
-  <app-column-form></app-column-form>
-  <app-row-form></app-row-form>
+  <div class="table-builder">
+    <app-column-form
+      (addColumn)="onAddColumn($event)"
+      (removeColumn)="onRemoveColumn($event)">
+    </app-column-form>
+
+    <app-row-form
+      (addRow)="onAddRow($event)"
+      (removeRow)="onRemoveRow($event)">
+    </app-row-form>
+  </div>
+
+  <div class="editor-view">
+    <app-editor [useDefaultTemplate]="false"></app-editor>
+  </div>
 </div>

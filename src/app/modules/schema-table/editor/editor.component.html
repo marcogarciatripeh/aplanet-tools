@@ -1,18 +1,27 @@
 <div class="editor-container">
   <label class="title">
     Schema editor
-    <span>Insert your schema in JSON format to generate the table</span>
   </label>
+
+  <div class="editor-actions">
+    <button mat-icon-button
+            (click)="copyToClipboard()"
+            matTooltip="Copiar conteúdo"
+            class="copy-button">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+  </div>
+
   <div class="monaco-wrapper">
-    <div class="loading-container" [class.hidden]="editorLoaded">
+    <div class="loading-container" *ngIf="!editorLoaded">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
 
     <ngx-monaco-editor
-        [options]="editorOptions"
-        [(ngModel)]="code"
-        (onInit)="onEditorInit()"
-        (ngModelChange)="onCodeChanged($event)">
+      [options]="editorOptions"
+      [(ngModel)]="code"
+      (ngModelChange)="onCodeChanged($event)"
+      (onInit)="onEditorInit($event)">
     </ngx-monaco-editor>
 
     <div class="error-message" *ngIf="currentError">
