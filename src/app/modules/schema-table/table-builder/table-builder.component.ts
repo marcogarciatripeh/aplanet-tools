@@ -4,6 +4,7 @@ import { ColumnFormComponent } from '../column-form/column-form.component';
 import { RowFormComponent } from '../row-form/row-form.component';
 import { EditorComponent } from '../editor/editor.component';
 import { TableSchema } from '../../../interfaces/schama-table.interface';
+import { HelperService } from '../../../services/helper.service';
 
 @Component({
   selector: 'app-table-builder',
@@ -19,6 +20,10 @@ import { TableSchema } from '../../../interfaces/schama-table.interface';
 })
 export class TableBuilderComponent {
   @ViewChild(EditorComponent) editor!: EditorComponent;
+
+  constructor(
+    private helperService: HelperService,
+  ) {}
 
   private schema: TableSchema = {
     columns: [],
@@ -47,7 +52,21 @@ export class TableBuilderComponent {
 
   updateEditor() {
     if (this.editor) {
-      const jsonSchema = JSON.stringify(this.schema, null, 4);
+      const formattedSchema = {
+        columns: this.schema.columns.map(column => {
+          if (column.units && column.units.length === 1 && this.helperService.getBaseUnits().includes(column.units[0])) {
+            const { units, ...rest } = column;
+            return {
+              ...rest,
+              unit: units[0]
+            };
+          }
+          return column;
+        }),
+        rows: this.schema.rows
+      };
+
+      const jsonSchema = JSON.stringify(formattedSchema, null, 4);
       this.editor.updateSchema(jsonSchema);
     }
   }
