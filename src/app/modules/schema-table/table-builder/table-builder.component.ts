@@ -4,7 +4,7 @@ import { ColumnFormComponent } from '../column-form/column-form.component';
 import { RowFormComponent } from '../row-form/row-form.component';
 import { EditorComponent } from '../editor/editor.component';
 import { TableSchema } from '../../../interfaces/schama-table.interface';
-import { HelperService } from '../../../services/helper.service';
+import { ConfigService } from '../../../services/config.service';
 
 @Component({
   selector: 'app-table-builder',
@@ -22,7 +22,7 @@ export class TableBuilderComponent {
   @ViewChild(EditorComponent) editor!: EditorComponent;
 
   constructor(
-    private helperService: HelperService,
+    private configService: ConfigService,
   ) {}
 
   private schema: TableSchema = {
@@ -54,7 +54,7 @@ export class TableBuilderComponent {
     if (this.editor) {
       const formattedSchema = {
         columns: this.schema.columns.map(column => {
-          if (column.units && column.units.length === 1 && this.helperService.getBaseUnits().includes(column.units[0])) {
+          if (column.units && column.units.length === 1 && this.configService.getBaseUnits().includes(column.units[0])) {
             const { units, ...rest } = column;
             return {
               ...rest,

@@ -8,7 +8,7 @@ import { VariableService } from '../../../services/variables.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { TableColumn, TableRow, UnitSelection } from '../../../interfaces/schama-table.interface';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { HelperService } from '../../../services/helper.service';
+import { ConfigService } from '../../../services/config.service';
 
 @Component({
   selector: 'app-table-render',
@@ -56,7 +56,7 @@ export class TableRenderComponent {
 
   constructor(
     private variableService: VariableService,
-    private helperService: HelperService,
+    private configService: ConfigService,
     private breakpointObserver: BreakpointObserver,
     private elementRef: ElementRef
   ) {}
@@ -174,7 +174,7 @@ export class TableRenderComponent {
   }
 
   getCurrencySymbol(currency: string): string {
-    return this.helperService.getCurrencySymbol(currency);
+    return this.configService.getCurrencySymbol(currency);
   }
 
   getUnitKey(rowIndex: number, columnIndex: number): string {

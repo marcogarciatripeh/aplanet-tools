@@ -10,7 +10,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
-import { HelperService } from '../../../services/helper.service';
+import { ConfigService } from '../../../services/config.service';
 
 @Component({
   selector: 'app-column-form',
@@ -53,13 +53,13 @@ export class ColumnFormComponent {
 
   constructor(
     private variableService: VariableService,
-    private helperService: HelperService
+    private configService: ConfigService
   ) {
     this.variables = Array.from(this.variableService.variables.keys());
-    this.types = this.helperService.getTypes();
-    this.allUnits = this.helperService.getAllUnits();
-    this.baseUnits = this.helperService.getBaseUnits();
-    this.currencyUnits = this.helperService.getCurrencyUnits();
+    this.types = this.configService.getTypes();
+    this.allUnits = this.configService.getAllUnits();
+    this.baseUnits = this.configService.getBaseUnits();
+    this.currencyUnits = this.configService.getCurrencyUnits();
 
     this.filteredVariables = this.variableControl.valueChanges.pipe(
       startWith(''),
@@ -81,11 +81,11 @@ export class ColumnFormComponent {
   }
 
   isBaseUnitSelected(): boolean {
-    return this.column.units.some(unit => this.helperService.isBaseUnit(unit));
+    return this.column.units.some(unit => this.configService.isBaseUnit(unit));
   }
 
   isCurrencySelected(): boolean {
-    return this.column.units.some(unit => this.helperService.isCurrencyUnit(unit));
+    return this.column.units.some(unit => this.configService.isCurrencyUnit(unit));
   }
 
   isVariableRequired(): boolean {

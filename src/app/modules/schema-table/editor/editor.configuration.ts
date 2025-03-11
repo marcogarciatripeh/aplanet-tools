@@ -1,97 +1,39 @@
+import { ConfigService } from '../../../services/config.service';
+
+const configService = new ConfigService();
+
 export const defaultSchema = {
-  schemaVersion: "1.0",
+  schemaVersion: configService.schemaVersion,
   jsonStructure: `{
-  "columns": [
-    {
-      "name": "string",
-      "type": "string",
-      "unit": "string|null",
-      "kpi_variable": "string",
-      "number_of_decimals": 0,
-      "units": ["string"],
-      "options": ["string"]
-    }
-  ],
-  "rows": []
-}`,
-
-  allowedTypes: [
-    "text",
-    "number",
-    "boolean",
-    "choices"
-  ],
-
-  allowedUnits: [
-    "currency",
-    "percentage",
-    "integer",
-    "euro",
-    "pound",
-    "dollar",
-    null
-  ],
+    "columns": [
+      {
+        "name": "string",
+        "type": "string",
+        "unit": "string|null",
+        "kpi_variable": "string",
+        "number_of_decimals": 0,
+        "units": ["string"],
+        "options": ["string"]
+      }
+    ],
+    "rows": []
+  }`,
 
   validationRules: {
-    required: ["columns"],
-    columnRequired: ["name", "type"],
+    required: configService.requiredSchemaFields,
+    columnRequired: configService.requiredColumnAttributes,
     minColumns: 1,
     validateColumn: (column: any, allColumns: any[]) => {
-      if (!column.name || !column.type) {
-        return false;
+      try {
+        return configService.validateColumn(column, allColumns);
+      } catch (error) {
+        throw new Error(`Column validation error: ${(error as any).message}`);
       }
-
-      if (!defaultSchema.allowedTypes.includes(column.type)) {
-        return false;
-      }
-
-      if (column.type === "number" && column.number_of_decimals) {
-        if (typeof column.number_of_decimals !== "number") {
-          return false;
-        }
-      }
-
-      const duplicateNames = allColumns.filter(c => c.name === column.name);
-      if (duplicateNames.length > 1) {
-        throw new Error(`Duplicate column name found: ${column.name}`);
-      }
-
-      return true;
-    },
-    validateRows: (rows: any[]) => {
-      if (rows && rows.length > 0) {
-        const invalidRows = rows.filter(row => !row.name);
-        if (invalidRows.length > 0) {
-          throw new Error('Todas as linhas precisam ter a propriedade "name"');
-        }
-      }
-      return true;
     }
   }
 };
 
-export const defaultTemplate = `{
-  "columns": [
-    {
-      "name": "Regions",
-      "type": "text",
-      "unit": null,
-      "kpi_variable": "regions"
-    },
-    {
-      "name": "Country",
-      "type": "text",
-      "unit": null
-    },
-    {
-      "name": "Economic value",
-      "type": "number",
-      "units": ["euro", "pound", "dollar"],
-      "number_of_decimals": 6
-    }
-  ],
-  "rows": []
-}`;
+export const defaultTemplate = configService.defaultTemplate;
 
 export const monacoConfig = {
   baseUrl: 'assets/monaco/min/vs',
