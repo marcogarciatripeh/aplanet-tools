@@ -20,10 +20,14 @@ export class ConfigService {
 
   readonly fieldValidations: { [key: string]: (value: any) => boolean } = {
     kpi_variable: (value: any) => typeof value === 'string',
-    number_of_decimals: (value: any) => typeof value === 'number' && value >= 0 && value <= 6,
-    unit: (value: any) => value === null || (typeof value === 'string' && this.baseUnits.includes(value)),
-    units: (value: any) => Array.isArray(value) && value.every(unit => this.allUnits.includes(unit)),
-    options: (value: any) => Array.isArray(value) && value.every(opt => typeof opt === 'string')
+    number_of_decimals: (value: any) => value === null ||
+      (typeof value === 'number' && value >= 0 && value <= 6),
+    unit: (value: any) => value === null ||
+      (typeof value === 'string' && this.baseUnits.includes(value)),
+    units: (value: any) => Array.isArray(value) &&
+      value.every(unit => this.allUnits.includes(unit)),
+    options: (value: any) => Array.isArray(value) &&
+      value.every(opt => typeof opt === 'string')
   };
 
   readonly schemaVersion = "1.0";
