@@ -23,3 +23,11 @@ export interface TableSchema {
   columns: any[];
   rows: any[];
 }
+export interface Column {
+  name: string;
+  type: string;
+  units?: string[];
+  unit?: string | null;
+  kpi_variable?: string;
+  number_of_decimals?: number | null;
+}

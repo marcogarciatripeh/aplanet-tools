@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
 import { ConfigService } from '../../../services/config.service';
+import { Column } from '../../../interfaces/schama-table.interface';
 
 @Component({
   selector: 'app-column-form',
@@ -132,7 +133,28 @@ export class ColumnFormComponent {
 
   onAddColumn() {
     if (this.isValid()) {
-      const newColumn = { ...this.column };
+
+      const newColumn: Column = {
+        name: this.column.name,
+        type: this.column.type
+      };
+
+      if (this.column.units.length === 0) {
+        newColumn.unit = null;
+      } else if (this.column.units.length === 1 && this.configService.isBaseUnit(this.column.units[0])) {
+        newColumn.unit = this.column.units[0];
+      } else {
+        newColumn.units = [...this.column.units];
+      }
+
+      if (this.column.kpi_variable) {
+        newColumn.kpi_variable = this.column.kpi_variable;
+      }
+
+      if (this.column.number_of_decimals !== null) {
+        newColumn.number_of_decimals = this.column.number_of_decimals;
+      }
+
       this.columns.push(newColumn);
       this.columns = [...this.columns];
       this.addColumn.emit(newColumn);

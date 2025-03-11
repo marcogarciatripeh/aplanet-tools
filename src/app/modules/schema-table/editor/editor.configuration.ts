@@ -4,21 +4,6 @@ const configService = new ConfigService();
 
 export const defaultSchema = {
   schemaVersion: configService.schemaVersion,
-  jsonStructure: `{
-    "columns": [
-      {
-        "name": "string",
-        "type": "string",
-        "unit": "string|null",
-        "kpi_variable": "string",
-        "number_of_decimals": 0,
-        "units": ["string"],
-        "options": ["string"]
-      }
-    ],
-    "rows": []
-  }`,
-
   validationRules: {
     required: configService.requiredSchemaFields,
     columnRequired: configService.requiredColumnAttributes,

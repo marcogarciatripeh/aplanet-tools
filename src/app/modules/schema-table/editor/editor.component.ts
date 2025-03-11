@@ -119,7 +119,7 @@ export class EditorComponent implements OnInit {
       try {
         await navigator.clipboard.writeText(content);
       } catch (err) {
-        console.error('Falha ao copiar para área de transferência:', err);
+        console.error('Failed to copy to clipboard:', err);
       }
     }
   }
