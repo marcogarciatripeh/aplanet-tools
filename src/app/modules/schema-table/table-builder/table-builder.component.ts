@@ -22,11 +22,7 @@ export class TableBuilderComponent {
   @ViewChild(EditorComponent) editor!: EditorComponent;
   @ViewChild(ColumnFormComponent) columnForm!: ColumnFormComponent;
 
-  constructor(
-    private configService: ConfigService,
-  ) {}
-
-  private schema: TableSchema = {
+  public schema: TableSchema = {
     columns: [],
     rows: []
   };
@@ -72,14 +68,7 @@ export class TableBuilderComponent {
     if (this.editor) {
       const formattedSchema = {
         columns: this.schema.columns.map(column => {
-          if (column.units && column.units.length === 1 && this.configService.getBaseUnits().includes(column.units[0])) {
-            const { units, ...rest } = column;
-            return {
-              ...rest,
-              unit: units[0]
-            };
-          }
-          return column;
+          return { ...column };
         }),
         rows: this.schema.rows
       };

@@ -1,11 +1,4 @@
-export interface TableColumn {
-  name: string;
-  type: string;
-  unit?: string | null;
-  units?: string[] | null;
-  kpi_variable?: string;
-  number_of_decimals?: number;
-}
+export interface TableColumn extends Column {}
 
 export interface TableRow {
   [key: string]: any;
@@ -20,14 +13,13 @@ export type UnitSelection = {
 }
 
 export interface TableSchema {
-  columns: any[];
-  rows: any[];
+  columns: Column[];
+  rows: Row[];
 }
 export interface Column {
   name: string;
   type: string;
   units?: string[];
-  unit?: string | null;
   kpi_variable?: string;
   number_of_decimals?: number | null;
   operation?: string;

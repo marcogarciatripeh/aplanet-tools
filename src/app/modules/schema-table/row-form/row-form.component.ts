@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { Column } from '../../../interfaces/schama-table.interface';
 
 @Component({
   selector: 'app-row-form',
@@ -45,6 +46,9 @@ export class RowFormComponent {
     }
     this._disabled = value;
   }
+
+  @Input() columns: Column[] = [];
+
   get disabled(): boolean {
     return this._disabled;
   }
@@ -62,6 +66,23 @@ export class RowFormComponent {
       this.addRow.emit(newRow);
       this.resetForm();
     }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['columns']) {
+      if (!this.hasNumberColumn() && this.row.operation === 'sum') {
+        this.row.operation = '';
+      }
+    }
+  }
+
+  hasNumberColumn(): boolean {
+    const hasNumber = this.columns.some(col => col.type === 'number');
+    return hasNumber;
+  }
+
+  canSelectOperation(): boolean {
+    return this.hasNumberColumn();
   }
 
   isValid(): boolean {

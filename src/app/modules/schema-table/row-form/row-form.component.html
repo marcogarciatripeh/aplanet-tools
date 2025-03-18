@@ -3,15 +3,17 @@
     <mat-form-field appearance="outline" density="compact" subscriptSizing="dynamic">
       <mat-label>{{ disabled ? 'Rows disabled - Text column with KPI variable' : 'Row name' }}</mat-label>
       <input matInput
-             [(ngModel)]="row.name"
-             required
-             [disabled]="disabled">
+        [(ngModel)]="row.name"
+        required
+        [disabled]="disabled">
     </mat-form-field>
 
     <mat-form-field appearance="outline" density="compact" subscriptSizing="dynamic">
       <mat-label>Operation</mat-label>
       <mat-select [(ngModel)]="row.operation">
-        <mat-option value="sum">Sum</mat-option>
+        <mat-option value="sum" [disabled]="!canSelectOperation()">
+          Sum {{ !canSelectOperation() ? '(requires at least 1 numeric column)' : '' }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
 

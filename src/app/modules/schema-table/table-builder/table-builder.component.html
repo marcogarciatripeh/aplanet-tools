@@ -12,6 +12,7 @@
     </app-column-form>
 
     <app-row-form
+      [columns]="schema.columns"
       [disabled]="columnForm.isRowsDisabled()"
       (addRow)="onAddRow($event)"
       (removeRow)="onRemoveRow($event)">

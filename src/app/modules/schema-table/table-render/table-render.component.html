@@ -1,8 +1,7 @@
 <div class="table-container">
-  <label class="title">
-    Generated table
-  </label>
+  <label class="title">Generated table</label>
   <table mat-table [dataSource]="rows" class="mat-elevation-z1">
+
     <ng-container *ngFor="let column of columns; let colIndex = index" [matColumnDef]="column.name">
       <th mat-header-cell *matHeaderCellDef>{{ column.name | titlecase }}</th>
       <td mat-cell *matCellDef="let row; let rowIndex = index">
@@ -28,7 +27,7 @@
         <ng-container *ngIf="column.type === 'choices'">
           <mat-form-field appearance="outline" density="compact" subscriptSizing="dynamic">
             <mat-select [(ngModel)]="row[column.name]" [multiple]="true"
-                        [placeholder]="'Select options'">
+                      [placeholder]="'Select options'">
               <mat-option *ngFor="let value of getKpiValues(column.kpi_variable || '')" [value]="value">
                 {{ value }}
               </mat-option>
@@ -46,20 +45,19 @@
           <div class="number-input-container">
             <mat-form-field appearance="outline" density="compact" subscriptSizing="dynamic">
               <input matInput
-                    type="number"
-                    [(ngModel)]="row[column.name]"
-                    [step]="column.number_of_decimals ? '0.' + '0'.repeat(column.number_of_decimals-1) + '1' : '1'"
-                    [value]="row[column.name]">
-              <span matSuffix *ngIf="column.unit === 'percentage'">%</span>
-              <span matSuffix *ngIf="column.unit === 'currency'">€</span>
+                type="number"
+                [(ngModel)]="row[column.name]"
+                [step]="column.number_of_decimals ? '0.' + '0'.repeat(column.number_of_decimals-1) + '1' : '1'"
+                [value]="row[column.name]">
+              <span matSuffix *ngIf="hasPercentageUnit(column)">%</span>
             </mat-form-field>
 
-            <!-- Units Select -->
-            <ng-container *ngIf="column.units">
+            <ng-container *ngIf="isCurrency(column)">
               <mat-form-field appearance="outline" density="compact" subscriptSizing="dynamic" class="units-select">
                 <mat-select
                   [(ngModel)]="selectedUnit[getUnitKey(rowIndex, colIndex)]"
-                  (ngModelChange)="onUnitChange($event, rowIndex, colIndex)">
+                  [value]="getSelectedUnit(rowIndex, colIndex, column)"
+                  (ngModelChange)="onUnitsChange($event, rowIndex, colIndex)">
                   <mat-option *ngFor="let unit of column.units" [value]="unit">
                     {{ getCurrencySymbol(unit) }}
                   </mat-option>
@@ -69,8 +67,21 @@
           </div>
         </ng-container>
       </td>
+      <td mat-footer-cell *matFooterCellDef>
+        {{ column.operation === 'sum' ? calculateColumnTotal(column.name) : '' }}
+      </td>
     </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns; let rowIndex = index"></tr>
+
+    <ng-container matColumnDef="rowTotal">
+      <th mat-header-cell *matHeaderCellDef>Total</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.operation === 'sum' ? calculateRowTotal(row) : '' }}
+      </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns" [hidden]="!hasTotals()"></tr>
   </table>
 </div>

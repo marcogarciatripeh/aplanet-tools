@@ -40,6 +40,12 @@ export class SchemaTableComponent {
   }
 
   generateTable() {
-    this.tableData = this.validJsonData;
+    this.tableData = null;
+
+    setTimeout(() => {
+      if (this.validJsonData) {
+        this.tableData = { ...this.validJsonData };
+      }
+    });
   }
 }

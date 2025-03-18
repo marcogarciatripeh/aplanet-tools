@@ -118,21 +118,18 @@ export class ColumnFormComponent {
     }
 
     const lastSelected = newValue[newValue.length - 1];
-    const previousUnits = this.column.units;
 
     if (this.baseUnits.includes(lastSelected)) {
-      if (previousUnits.some(unit => this.baseUnits.includes(unit))) {
-        this.column.units = [lastSelected];
-      } else {
-        this.column.units = [lastSelected];
-      }
+      this.column.units = [lastSelected];
       return;
     }
 
     if (this.currencyUnits.includes(lastSelected)) {
-      const onlyCurrencies = newValue.filter(unit => this.currencyUnits.includes(unit));
-      this.column.units = onlyCurrencies;
+      this.column.units = newValue.filter(unit => this.currencyUnits.includes(unit));
+      return;
     }
+
+    this.column.units = newValue;
   }
 
   onTypeChange() {
@@ -142,31 +139,7 @@ export class ColumnFormComponent {
 
   onAddColumn() {
     if (this.isValid()) {
-
-      const newColumn: Column = {
-        name: this.column.name,
-        type: this.column.type
-      };
-
-      if (this.column.units.length === 0) {
-        newColumn.unit = null;
-      } else if (this.column.units.length === 1 && this.configService.isBaseUnit(this.column.units[0])) {
-        newColumn.unit = this.column.units[0];
-      } else {
-        newColumn.units = [...this.column.units];
-      }
-
-      if (this.column.kpi_variable) {
-        newColumn.kpi_variable = this.column.kpi_variable;
-      }
-
-      if (this.column.number_of_decimals !== null) {
-        newColumn.number_of_decimals = this.column.number_of_decimals;
-      }
-
-      if (this.column.operation) {
-        newColumn.operation = this.column.operation;
-      }
+      const newColumn = this.configService.transformColumnToSchema(this.column);
 
       this.columns.push(newColumn);
       this.columns = [...this.columns];
