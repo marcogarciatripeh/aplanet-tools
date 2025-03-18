@@ -8,9 +8,14 @@
     <mat-form-field appearance="outline" density="compact" subscriptSizing="dynamic">
       <mat-label>Type</mat-label>
       <mat-select [(ngModel)]="column.type" required (selectionChange)="onTypeChange()">
-        <mat-option *ngFor="let type of types" [value]="type">
-          {{type | titlecase}}
+        <mat-option *ngIf="columns.length === 0" value="text">
+          Text
         </mat-option>
+        <ng-container *ngIf="columns.length > 0">
+          <mat-option *ngFor="let type of types" [value]="type">
+            {{type | titlecase}}
+          </mat-option>
+        </ng-container>
       </mat-select>
     </mat-form-field>
 

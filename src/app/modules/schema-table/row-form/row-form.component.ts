@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -33,7 +33,23 @@ export class RowFormComponent {
   @Output() addRow = new EventEmitter<any>();
   @Output() removeRow = new EventEmitter<number>();
 
+  @Input() set disabled(value: boolean) {
+    if (value) {
+      this.rows = [];
+      this.removeRow.emit(-1);
+    }
+    this._disabled = value;
+  }
+  get disabled(): boolean {
+    return this._disabled;
+  }
+  private _disabled: boolean = false;
+
   onAddRow() {
+    if (this.disabled) {
+      return;
+    }
+
     if (this.isValid()) {
       const newRow = { ...this.row };
       this.rows.push(newRow);

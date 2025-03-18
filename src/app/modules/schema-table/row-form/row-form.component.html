@@ -1,14 +1,17 @@
 <div class="row-form-container">
   <div class="row-form">
     <mat-form-field appearance="outline" density="compact" subscriptSizing="dynamic">
-      <mat-label>Row name</mat-label>
-      <input matInput [(ngModel)]="row.name" required>
+      <mat-label>{{ disabled ? 'Rows disabled - Text column with KPI variable' : 'Row name' }}</mat-label>
+      <input matInput
+             [(ngModel)]="row.name"
+             required
+             [disabled]="disabled">
     </mat-form-field>
 
     <button mat-flat-button
-            color="primary"
-            (click)="onAddRow()"
-            [disabled]="!isValid()">
+      color="primary"
+      (click)="onAddRow()"
+      [disabled]="disabled || !isValid()">
       Add Row
     </button>
   </div>

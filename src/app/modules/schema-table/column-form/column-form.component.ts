@@ -51,6 +51,7 @@ export class ColumnFormComponent {
 
   @Output() addColumn = new EventEmitter<any>();
   @Output() removeColumn = new EventEmitter<number>();
+  @Output() removeAllRows = new EventEmitter<void>();
 
   constructor(
     private variableService: VariableService,
@@ -74,7 +75,7 @@ export class ColumnFormComponent {
       return false;
     }
 
-    if (this.column.type === 'choices' && !this.column.kpi_variable) {
+    if (this.columns.length === 0 && this.column.type !== 'text') {
       return false;
     }
 
@@ -99,6 +100,11 @@ export class ColumnFormComponent {
 
   isChoicesType(): boolean {
     return this.column.type === 'choices';
+  }
+
+  isRowsDisabled(): boolean {
+    return (this.columns[0]?.type === 'text' && !!this.columns[0]?.kpi_variable) ||
+          (this.columns.length === 0 && this.column.type === 'text' && !!this.column.kpi_variable);
   }
 
   //On Session
@@ -164,8 +170,11 @@ export class ColumnFormComponent {
 
   onVariableSelected(event: any) {
     this.column.kpi_variable = event.option.value;
-  }
 
+    if (this.columns.length === 0 && this.column.type === 'text') {
+      this.removeAllRows.emit();
+    }
+  }
 
   //Misc. Session
   resetForm() {

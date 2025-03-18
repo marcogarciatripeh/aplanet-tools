@@ -5,11 +5,14 @@
 
   <div class="table-builder">
     <app-column-form
+      #columnForm
       (addColumn)="onAddColumn($event)"
-      (removeColumn)="onRemoveColumn($event)">
+      (removeColumn)="onRemoveColumn($event)"
+      (removeAllRows)="onRemoveAllRows()">
     </app-column-form>
 
     <app-row-form
+      [disabled]="columnForm.isRowsDisabled()"
       (addRow)="onAddRow($event)"
       (removeRow)="onRemoveRow($event)">
     </app-row-form>

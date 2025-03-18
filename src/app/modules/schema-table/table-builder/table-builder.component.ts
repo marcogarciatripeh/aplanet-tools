@@ -20,6 +20,7 @@ import { ConfigService } from '../../../services/config.service';
 })
 export class TableBuilderComponent {
   @ViewChild(EditorComponent) editor!: EditorComponent;
+  @ViewChild(ColumnFormComponent) columnForm!: ColumnFormComponent;
 
   constructor(
     private configService: ConfigService,
@@ -31,6 +32,10 @@ export class TableBuilderComponent {
   };
 
   onAddColumn(column: any) {
+    if (this.schema.columns.length === 0 && column.type !== 'text') {
+      throw new Error('First column must be of type text');
+    }
+
     this.schema.columns.push(column);
     this.updateEditor();
   }
@@ -41,12 +46,25 @@ export class TableBuilderComponent {
   }
 
   onAddRow(row: any) {
+    if (this.columnForm && this.columnForm.isRowsDisabled()) {
+      return;
+    }
+
     this.schema.rows.push(row);
     this.updateEditor();
   }
 
   onRemoveRow(index: number) {
-    this.schema.rows.splice(index, 1);
+    if (index === -1) {
+      this.schema.rows = [];
+    } else {
+      this.schema.rows.splice(index, 1);
+    }
+    this.updateEditor();
+  }
+
+  onRemoveAllRows() {
+    this.schema.rows = [];
     this.updateEditor();
   }
 
