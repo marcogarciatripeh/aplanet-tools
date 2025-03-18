@@ -16,7 +16,7 @@ export class ConfigService {
 
   readonly requiredSchemaFields = ['columns'];
   readonly requiredColumnAttributes = ['name', 'type'];
-  readonly optionalColumnAttributes = ['kpi_variable', 'number_of_decimals', 'unit', 'units', 'options'];
+  readonly optionalColumnAttributes = ['kpi_variable', 'number_of_decimals', 'unit', 'units', 'options', 'operation'];
 
   readonly fieldValidations: { [key: string]: (value: any) => boolean } = {
     kpi_variable: (value: any) => typeof value === 'string',
@@ -27,7 +27,9 @@ export class ConfigService {
     units: (value: any) => Array.isArray(value) &&
       value.every(unit => this.allUnits.includes(unit)),
     options: (value: any) => Array.isArray(value) &&
-      value.every(opt => typeof opt === 'string')
+      value.every(opt => typeof opt === 'string'),
+    operation: (value: any) => value === null ||
+      (typeof value === 'string' && value === 'sum')
   };
 
   readonly schemaVersion = "1.0";
@@ -48,7 +50,8 @@ export class ConfigService {
         "name": "Economic value",
         "type": "number",
         "units": ["euro", "pound", "dollar"],
-        "number_of_decimals": 6
+        "number_of_decimals": 6,
+        "operation": "sum"
       }
     ],
     "rows": []
@@ -96,6 +99,12 @@ export class ConfigService {
 
       if (!this.types.includes(column.type)) {
         throw new Error(`Invalid type: ${column.type}`);
+      }
+
+      if (column.type === 'number' && column.operation) {
+        if (column.operation !== 'sum') {
+          throw new Error('Operation must be "sum" for number type columns');
+        }
       }
 
       Object.keys(column).forEach(field => {

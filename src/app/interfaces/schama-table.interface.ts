@@ -30,4 +30,11 @@ export interface Column {
   unit?: string | null;
   kpi_variable?: string;
   number_of_decimals?: number | null;
+  operation?: string;
+}
+
+export interface Row {
+  name: string;
+  operation?: string;
+  [key: string]: any;
 }

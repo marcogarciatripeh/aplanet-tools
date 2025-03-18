@@ -61,6 +61,13 @@
       <input matInput type="number" [(ngModel)]="column.number_of_decimals" min="0" max="6">
     </mat-form-field>
 
+    <mat-form-field *ngIf="isNumberType()" appearance="outline" density="compact" subscriptSizing="dynamic">
+      <mat-label>Operation</mat-label>
+      <mat-select [(ngModel)]="column.operation">
+        <mat-option value="sum">Sum</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <button mat-flat-button
             color="primary"
             (click)="onAddColumn()"
@@ -93,6 +100,11 @@
     <ng-container matColumnDef="number_of_decimals">
       <th mat-header-cell *matHeaderCellDef>Decimals</th>
       <td mat-cell *matCellDef="let column">{{column.number_of_decimals || '-'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="operation">
+      <th mat-header-cell *matHeaderCellDef>Operation</th>
+      <td mat-cell *matCellDef="let column">{{column.operation || '-'}}</td>
     </ng-container>
 
     <ng-container matColumnDef="actions">

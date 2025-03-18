@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-row-form',
@@ -17,6 +19,8 @@ import { MatTableModule } from '@angular/material/table';
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
+    MatSelectModule,
+    MatOptionModule,
     MatTableModule
   ],
   templateUrl: './row-form.component.html',
@@ -24,11 +28,12 @@ import { MatTableModule } from '@angular/material/table';
 })
 export class RowFormComponent {
   row = {
-    name: ''
+    name: '',
+    operation: ''
   };
 
   rows: any[] = [];
-  displayedColumns: string[] = ['name', 'actions'];
+  displayedColumns: string[] = ['name', 'operation', 'actions'];
 
   @Output() addRow = new EventEmitter<any>();
   @Output() removeRow = new EventEmitter<number>();
@@ -71,7 +76,8 @@ export class RowFormComponent {
 
   resetForm() {
     this.row = {
-      name: ''
+      name: '',
+      operation: ''
     };
   }
 }
