@@ -135,6 +135,8 @@ export class ColumnFormComponent {
   onTypeChange() {
     this.column.units = [];
     this.column.number_of_decimals = null;
+    this.column.operation = '';
+    this.column.kpi_variable = '';
   }
 
   onAddColumn() {
