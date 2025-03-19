@@ -37,9 +37,9 @@
     </mat-form-field>
 
     <mat-form-field *ngIf="isChoicesType() || (column.type === 'text')"
-                    appearance="outline"
-                    density="compact"
-                    subscriptSizing="dynamic">
+      appearance="outline"
+      density="compact"
+      subscriptSizing="dynamic">
       <mat-label>KPI Variable</mat-label>
       <input type="text"
             matInput
@@ -49,6 +49,7 @@
             [(ngModel)]="column.kpi_variable">
       <mat-autocomplete #auto="matAutocomplete"
                         (optionSelected)="onVariableSelected($event)">
+        <mat-option>None</mat-option>
         <mat-option *ngFor="let variable of filteredVariables | async"
                     [value]="variable">
           {{variable}}
@@ -63,7 +64,8 @@
 
     <mat-form-field *ngIf="isNumberType()" appearance="outline" density="compact" subscriptSizing="dynamic">
       <mat-label>Operation</mat-label>
-      <mat-select [(ngModel)]="column.operation">
+      <mat-select [(ngModel)]="column.operation" [required]="false">
+        <mat-option>None</mat-option>
         <mat-option value="sum">Sum</mat-option>
       </mat-select>
     </mat-form-field>
