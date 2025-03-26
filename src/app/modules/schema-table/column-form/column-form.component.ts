@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
 import { ConfigService } from '../../../services/config.service';
-import { Column } from '../../../interfaces/schama-table.interface';
+import { Column, UnitGroup } from '../../../interfaces/schama-table.interface';
 import { MatOptionModule } from '@angular/material/core';
 
 @Component({
@@ -34,6 +34,24 @@ import { MatOptionModule } from '@angular/material/core';
   styleUrls: ['./column-form.component.scss']
 })
 export class ColumnFormComponent {
+
+  constructor(
+    private variableService: VariableService,
+    private configService: ConfigService
+  ) {
+    this.variables = Array.from(this.variableService.variables.keys());
+    this.types = this.configService.getTypes();
+    this.allUnits = this.configService.getAllUnits();
+    this.baseUnits = this.configService.getBaseUnits();
+    this.currencyUnits = this.configService.getCurrencyUnits();
+    this.unitGroups = this.configService.getUnitGroups();
+
+    this.filteredVariables = this.variableControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || ''))
+    );
+  }
+
   column = {
     name: '',
     type: '',
@@ -48,6 +66,7 @@ export class ColumnFormComponent {
   types: string[];
   allUnits: string[];
   baseUnits: string[];
+  unitGroups: UnitGroup[];
   currencyUnits: string[];
   filteredVariables: Observable<string[]>;
   variableControl = new FormControl('');
@@ -55,22 +74,6 @@ export class ColumnFormComponent {
   @Output() addColumn = new EventEmitter<any>();
   @Output() removeColumn = new EventEmitter<number>();
   @Output() removeAllRows = new EventEmitter<void>();
-
-  constructor(
-    private variableService: VariableService,
-    private configService: ConfigService
-  ) {
-    this.variables = Array.from(this.variableService.variables.keys());
-    this.types = this.configService.getTypes();
-    this.allUnits = this.configService.getAllUnits();
-    this.baseUnits = this.configService.getBaseUnits();
-    this.currencyUnits = this.configService.getCurrencyUnits();
-
-    this.filteredVariables = this.variableControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || ''))
-    );
-  }
 
   //Check Session
   isValid(): boolean {
@@ -108,6 +111,16 @@ export class ColumnFormComponent {
   isRowsDisabled(): boolean {
     return (this.columns[0]?.type === 'text' && !!this.columns[0]?.kpi_variable) ||
           (this.columns.length === 0 && this.column.type === 'text' && !!this.column.kpi_variable);
+  }
+
+  isOtherGroupSelected(currentGroup: string, unit: string): boolean {
+    if (!this.column.units?.length) return false;
+
+    if (this.column.units.length > 0) {
+      const firstUnitGroup = this.configService.getUnitGroupFromUnit(this.column.units[0]);
+      return firstUnitGroup !== currentGroup;
+    }
+    return false;
   }
 
   //On Session
@@ -174,6 +187,10 @@ export class ColumnFormComponent {
     this.columns.splice(index, 1);
     this.columns = [...this.columns];
     this.removeColumn.emit(index);
+  }
+
+  getUnitsFromGroup(groupName: string): string[] {
+    return this.configService.getUnitsFromGroup(groupName);
   }
 
   _filter(value: string): string[] {

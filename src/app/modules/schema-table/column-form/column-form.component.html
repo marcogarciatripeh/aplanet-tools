@@ -22,15 +22,11 @@
     <mat-form-field *ngIf="isNumberType()" appearance="outline" density="compact" subscriptSizing="dynamic">
       <mat-label>Units</mat-label>
       <mat-select [(ngModel)]="column.units" multiple (valueChange)="onUnitChange($event)">
-        <mat-optgroup label="Base Units">
-          <mat-option *ngFor="let unit of baseUnits" [value]="unit" [disabled]="isCurrencySelected() || (isBaseUnitSelected() && !column.units.includes(unit))">
-            {{unit | titlecase}}
-          </mat-option>
-        </mat-optgroup>
-
-        <mat-optgroup label="Currencies">
-          <mat-option *ngFor="let unit of currencyUnits" [value]="unit" [disabled]="isBaseUnitSelected()">
-            {{unit | titlecase}}
+        <mat-optgroup *ngFor="let group of unitGroups" [label]="group.name | titlecase">
+          <mat-option *ngFor="let unit of getUnitsFromGroup(group.name)"
+                      [value]="unit"
+                      [disabled]="isOtherGroupSelected(group.name, unit)">
+            {{group.units[unit]}}
           </mat-option>
         </mat-optgroup>
       </mat-select>

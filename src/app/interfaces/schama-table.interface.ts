@@ -30,3 +30,8 @@ export interface Row {
   operation?: string;
   [key: string]: any;
 }
+
+export interface UnitGroup {
+  name: string;
+  units: { [key: string]: string };
+}

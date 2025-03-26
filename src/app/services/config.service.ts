@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Column } from '../interfaces/schama-table.interface';
+import { Column, UnitGroup } from '../interfaces/schama-table.interface';
+import { UNIT_GROUPS, UNIT_SYMBOLS } from './units.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,26 +8,37 @@ import { Column } from '../interfaces/schama-table.interface';
 export class ConfigService {
   private selectedUnit: { [key: string]: string } = {};
   private readonly types = ['text', 'number', 'boolean', 'choices'];
-  private readonly baseUnits = ['percentage', 'integer', 'currency'];
-  private readonly currencyUnits = ['euro', 'pound', 'dollar'];
-  private readonly allUnits = [...this.baseUnits, ...this.currencyUnits];
-  private readonly currencySymbols = new Map<string, string>([
-    ['euro', '€'],
-    ['currency', '€'],
-    ['pound', '£'],
-    ['dollar', '$'],
-  ]);
 
   readonly requiredSchemaFields = ['columns'];
   readonly requiredColumnAttributes = ['name', 'type'];
   readonly optionalColumnAttributes = ['kpi_variable', 'number_of_decimals', 'units', 'options', 'operation'];
+
+  private get allUnits(): string[] {
+    return UNIT_GROUPS.reduce((units: string[], group) => {
+      return units.concat(Object.keys(group.units));
+    }, []);
+  }
+
+  private get baseUnits(): string[] {
+    return UNIT_GROUPS
+      .filter(g => g.name !== 'currency')
+      .reduce((units: string[], group) => {
+        return units.concat(Object.keys(group.units));
+      }, []);
+  }
+
+  private get currencyUnits(): string[] {
+    const currencyGroup = UNIT_GROUPS.find(g => g.name === 'currency');
+    return currencyGroup ? Object.keys(currencyGroup.units) : [];
+  }
 
   readonly fieldValidations: { [key: string]: (value: any) => boolean } = {
     kpi_variable: (value: any) => typeof value === 'string',
     number_of_decimals: (value: any) => value === null ||
       (typeof value === 'number' && value >= 0 && value <= 6),
     units: (value: any) => Array.isArray(value) &&
-      value.every(unit => this.allUnits.includes(unit)),
+      this.areUnitsFromSameGroup(value) &&
+      value.every(unit => UNIT_GROUPS.some(g => Object.keys(g.units).includes(unit))),
     options: (value: any) => Array.isArray(value) &&
       value.every(opt => typeof opt === 'string'),
     operation: (value: any) => value === null ||
@@ -59,7 +71,27 @@ export class ConfigService {
   }`;
 
   getCurrencySymbol(currency: string): string {
-    return this.currencySymbols.get(currency) || currency;
+    return UNIT_SYMBOLS.get(currency) || currency;
+  }
+
+  getUnitGroups(): UnitGroup[] {
+    return UNIT_GROUPS;
+  }
+
+  getUnitsFromGroup(groupName: string): string[] {
+    const group = UNIT_GROUPS.find(g => g.name === groupName);
+    return group ? Object.keys(group.units) : [];
+  }
+
+  getUnitGroupFromUnit(unit: string): string | null {
+    const group = UNIT_GROUPS.find(g => Object.keys(g.units).includes(unit));
+    return group ? group.name : null;
+  }
+
+  areUnitsFromSameGroup(units: string[]): boolean {
+    if (units.length <= 1) return true;
+    const firstUnitGroup = this.getUnitGroupFromUnit(units[0]);
+    return units.every(unit => this.getUnitGroupFromUnit(unit) === firstUnitGroup);
   }
 
   getTypes(): string[] {
