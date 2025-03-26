@@ -204,6 +204,10 @@ export class TableRenderComponent {
     return this.configService.isCurrency(column);
   }
 
+  isCurrencyUnit(unit: string): boolean {
+    return this.configService.isCurrencyUnit(unit);
+  }
+
   hasOnlyChoiceColumns(): boolean {
     return this.columns.length > 0 && this.columns.every(col => col.type === 'choices');
   }
@@ -292,8 +296,8 @@ export class TableRenderComponent {
     return this.configService.getDefaultValue(column);
   }
 
-  getCurrencySymbol(currency: string): string {
-    return this.configService.getCurrencySymbol(currency);
+  getCurrencySymbol(unit: string): string {
+    return this.configService.getCurrencySymbol(unit);
   }
 
   getUnitKey(rowIndex: number, columnIndex: number): string {
@@ -306,6 +310,21 @@ export class TableRenderComponent {
 
   getSelectedUnit(rowIndex: number, colIndex: number, column: Column): string {
     return this.configService.getSelectedUnit(rowIndex, colIndex, column);
+  }
+
+  getUnitsList(column: Column): string[] {
+    return column.units || [];
+  }
+
+  getUnitDisplay(unit: string): string {
+    const group = this.configService.getUnitGroups()
+      .find(g => Object.keys(g.units).includes(unit));
+    return group ? group.units[unit] : unit;
+  }
+
+  getSelectedUnitSymbol(rowIndex: number, colIndex: number): string {
+    const unit = this.selectedUnit[this.getUnitKey(rowIndex, colIndex)];
+    return this.isCurrencyUnit(unit) ? this.getCurrencySymbol(unit) : '';
   }
 
   //On session

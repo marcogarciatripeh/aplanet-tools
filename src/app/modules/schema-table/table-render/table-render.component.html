@@ -52,14 +52,14 @@
               <span matSuffix *ngIf="hasPercentageUnit(column)">%</span>
             </mat-form-field>
 
-            <ng-container *ngIf="isCurrency(column)">
+            <ng-container *ngIf="(column.units?.length ?? 0) > 0">
               <mat-form-field appearance="outline" density="compact" subscriptSizing="dynamic" class="units-select">
                 <mat-select
                   [(ngModel)]="selectedUnit[getUnitKey(rowIndex, colIndex)]"
                   [value]="getSelectedUnit(rowIndex, colIndex, column)"
                   (ngModelChange)="onUnitsChange($event, rowIndex, colIndex)">
-                  <mat-option *ngFor="let unit of column.units" [value]="unit">
-                    {{ getCurrencySymbol(unit) }}
+                  <mat-option *ngFor="let unit of getUnitsList(column)" [value]="unit">
+                    {{ isCurrencyUnit(unit) ? getCurrencySymbol(unit) : getUnitDisplay(unit) }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
