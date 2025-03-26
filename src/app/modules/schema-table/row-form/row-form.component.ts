@@ -60,7 +60,12 @@ export class RowFormComponent {
     }
 
     if (this.isValid()) {
-      const newRow = { ...this.row };
+      const newRow: any = { name: this.row.name };
+
+      if (this.row.operation) {
+        newRow.operation = this.row.operation;
+      }
+
       this.rows.push(newRow);
       this.rows = [...this.rows];
       this.addRow.emit(newRow);
