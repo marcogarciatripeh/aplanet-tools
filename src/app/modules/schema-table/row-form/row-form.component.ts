@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Column } from '../../../interfaces/schama-table.interface';
 
 @Component({
@@ -22,7 +24,9 @@ import { Column } from '../../../interfaces/schama-table.interface';
     MatIconModule,
     MatSelectModule,
     MatOptionModule,
-    MatTableModule
+    MatTableModule,
+    MatCheckboxModule,
+    MatTooltipModule
   ],
   templateUrl: './row-form.component.html',
   styleUrls: ['./row-form.component.scss']
@@ -60,10 +64,12 @@ export class RowFormComponent {
     }
 
     if (this.isValid()) {
-      const newRow: any = { name: this.row.name };
+      const newRow: any = {
+        name: this.row.name
+      };
 
-      if (this.row.operation) {
-        newRow.operation = this.row.operation;
+      if (this.hasExistingOperation() || this.row.operation === 'sum') {
+        newRow.operation = 'sum';
       }
 
       this.rows.push(newRow);
@@ -71,6 +77,15 @@ export class RowFormComponent {
       this.addRow.emit(newRow);
       this.resetForm();
     }
+  }
+
+  onOperationChange(event: MatCheckboxChange) {
+    if (this.isOperationLocked()) {
+      this.row.operation = this.hasExistingOperation() ? 'sum' : '';
+      return;
+    }
+
+    this.row.operation = event.checked ? 'sum' : '';
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -103,7 +118,16 @@ export class RowFormComponent {
   resetForm() {
     this.row = {
       name: '',
-      operation: ''
+      operation: this.hasExistingOperation() ? 'sum' : ''
     };
+  }
+
+  isOperationLocked(): boolean {
+    return this.rows.length > 0;
+  }
+
+  hasExistingOperation(): boolean {
+    if (this.rows.length === 0) return false;
+    return this.rows[0].operation === 'sum';
   }
 }

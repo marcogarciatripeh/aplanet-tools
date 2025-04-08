@@ -8,15 +8,18 @@
         [disabled]="disabled">
     </mat-form-field>
 
-    <mat-form-field appearance="outline" density="compact" subscriptSizing="dynamic">
-      <mat-label>Operation</mat-label>
-      <mat-select [(ngModel)]="row.operation" [required]="false">
-        <mat-option>None</mat-option>
-        <mat-option value="sum" [disabled]="!canSelectOperation()">
-          Sum {{ !canSelectOperation() ? '(requires at least 1 numeric column)' : '' }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="checkbox-wrapper"
+        [matTooltip]="!canSelectOperation() ? 'Requires at least 1 numeric column' : ''"
+        [matTooltipDisabled]="canSelectOperation()"
+        matTooltipPosition="above">
+      <mat-checkbox
+        [(ngModel)]="row.operation"
+        [disabled]="!canSelectOperation() || isOperationLocked()"
+        [checked]="row.operation === 'sum' || hasExistingOperation()"
+        (change)="onOperationChange($event)">
+        Sum
+      </mat-checkbox>
+    </div>
 
     <button mat-flat-button
       color="primary"
