@@ -6,10 +6,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatOptionModule } from '@angular/material/core';
 import { Column } from '../../../interfaces/schama-table.interface';
 
 @Component({
@@ -129,5 +129,12 @@ export class RowFormComponent {
   hasExistingOperation(): boolean {
     if (this.rows.length === 0) return false;
     return this.rows[0].operation === 'sum';
+  }
+
+  clearAllRows() {
+    if (this.hasExistingOperation()) {
+      this.rows = [];
+      this.removeRow.emit(-1);
+    }
   }
 }

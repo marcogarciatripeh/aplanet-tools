@@ -8,12 +8,14 @@
       #columnForm
       (addColumn)="onAddColumn($event)"
       (removeColumn)="onRemoveColumn($event)"
-      (removeAllRows)="onRemoveAllRows()">
+      (removeAllRows)="onRemoveAllRows()"
+      (numericColumnDeleted)="rowForm.clearAllRows()">
     </app-column-form>
 
     <app-row-form
+      #rowForm
       [columns]="schema.columns"
-      [disabled]="columnForm.isRowsDisabled()"
+      [disabled]="columnForm?.isRowsDisabled() || false"
       (addRow)="onAddRow($event)"
       (removeRow)="onRemoveRow($event)">
     </app-row-form>

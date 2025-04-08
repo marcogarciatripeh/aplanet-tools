@@ -74,6 +74,7 @@ export class ColumnFormComponent {
   @Output() addColumn = new EventEmitter<any>();
   @Output() removeColumn = new EventEmitter<number>();
   @Output() removeAllRows = new EventEmitter<void>();
+  @Output() numericColumnDeleted = new EventEmitter<void>();
 
   //Check Session
   isValid(): boolean {
@@ -184,8 +185,15 @@ export class ColumnFormComponent {
   }
 
   deleteColumn(index: number) {
+    const deletedColumn = this.columns[index];
     this.columns.splice(index, 1);
     this.columns = [...this.columns];
+
+    // Verifica se a coluna excluída era numérica e se não há mais colunas numéricas
+    if (deletedColumn.type === 'number' && !this.columns.some(col => col.type === 'number')) {
+      this.numericColumnDeleted.emit();
+    }
+
     this.removeColumn.emit(index);
   }
 
