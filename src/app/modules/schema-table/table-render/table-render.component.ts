@@ -35,7 +35,6 @@ export class TableRenderComponent {
       this.rows.forEach((row, rowIndex) => {
         this.columns.forEach((column, colIndex) => {
           if (this.isCurrency(column) && column.units && column.units.length > 0) {
-            // Sempre seleciona a primeira unidade disponível
             this.selectedUnit[this.getUnitKey(rowIndex, colIndex)] = column.units[0];
           }
         });

@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
 import { ConfigService } from '../../../services/config.service';
-import { Column, UnitGroup } from '../../../interfaces/schama-table.interface';
+import { UnitGroup } from '../../../interfaces/schama-table.interface';
 import { MatOptionModule } from '@angular/material/core';
 
 @Component({
@@ -189,7 +189,6 @@ export class ColumnFormComponent {
     this.columns.splice(index, 1);
     this.columns = [...this.columns];
 
-    // Verifica se a coluna excluída era numérica e se não há mais colunas numéricas
     if (deletedColumn.type === 'number' && !this.columns.some(col => col.type === 'number')) {
       this.numericColumnDeleted.emit();
     }
