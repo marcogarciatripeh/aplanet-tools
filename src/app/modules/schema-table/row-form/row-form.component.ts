@@ -112,6 +112,11 @@ export class RowFormComponent {
   deleteRow(index: number) {
     this.rows.splice(index, 1);
     this.rows = [...this.rows];
+
+    if (this.rows.length === 0) {
+      this.row.operation = '';
+    }
+
     this.removeRow.emit(index);
   }
 
@@ -134,6 +139,7 @@ export class RowFormComponent {
   clearAllRows() {
     if (this.hasExistingOperation()) {
       this.rows = [];
+      this.row.operation = '';
       this.removeRow.emit(-1);
     }
   }
